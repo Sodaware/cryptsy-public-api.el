@@ -82,6 +82,14 @@ Using nil or :all for MARKET-ID will return general data."
   "Get the informational (none-history) for NAME from a RESPONSE."
   (assoc-default name (assoc-default 'markets (assoc-default 'return response))))
 
+(defun cryptsy-public-api-get-buy-orders (name response)
+  "Get the buy orders for NAME from a RESPONSE."
+  (assoc-default 'buyorders (cryptsy-public-api-get-info name response)))
+
+(defun cryptsy-public-api-get-sell-orders (name response)
+  "Get the sell orders for NAME from a RESPONSE."
+  (assoc-default 'sellorders (cryptsy-public-api-get-info name response)))
+
 (defun cryptsy-public-api-get (&rest query-vars)
   "Generate a uri using QUERY-VARS and retrieve the result from the API."
   (cryptsy-public-api-get-uri (cryptsy-public-api-create-endpoint query-vars)))

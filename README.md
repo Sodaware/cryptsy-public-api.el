@@ -14,15 +14,15 @@ something more interesting.
 
 All Emacs installs are a little different, but the basic outline is this:
 
-1. Download the source code and put it somewhere Emacs can find it (probably
+- Download the source code and put it somewhere Emacs can find it (probably
     `~/.emacs.d/`)
     
-2. Add that directory to your load-path if it’s not yet there:
+- Add that directory to your load-path if it’s not yet there:
 ```lisp
 (add-to-list 'load-path "/path/to/dir")
 ```
  
-3. Add `(require 'cryptsy-public-api)` somewhere in Emacs initialization file.
+- Add `(require 'cryptsy-public-api)` somewhere in Emacs initialization file.
 
 
 ## Usage
@@ -68,6 +68,55 @@ For more information on the public API, see the official documentation:
 https://www.cryptsy.com/pages/publicapi
 
 *There are no interactive functions as part of this library.*
+
+
+## Helpers
+
+The library also provides several helper functions to make it easier to extract
+information from the JSON responses.
+
+### cryptsy-public-api-get-info-value
+
+Takes a currency identifier, field name and JSON response and returns the
+value. The earlier example for fetching a currency's value can be rewritten as:
+
+```lisp
+(let ((response (cryptsy-public-api-get-market-data 2)))
+  (cryptsy-public-api-get-info-value 'BTC 'lasttradeprice contents))
+```
+
+The following field names can be used:
+
+ - `marketid` - The market's ID which can be used when querying the API
+ - `label` - The full label of the market, such as "DOGE/USD"
+ - `primarycode` - The market's primary code, such as BTC or DOGE
+ - `primaryname` - The full name of the primary market
+ - `secondarycode` - The market's secondary code, such as USD
+ - `secondaryname` - The market's secondary name
+ - `lasttradetime` - The last time a trade was made
+ - `volume` - The total volume of trades in the last 24 hours
+ - `lasttradeprice` - The last trade price on this market
+
+
+### cryptsy-public-api-get-buy-orders
+
+Takes a currency identifier and JSON response and returns a `vector` of buy
+orders. Each buy order consists of three fields:
+
+ - `total` - The total value of the order
+ - `quantity` - The number of currency items bought
+ - `price` - The price per unit
+
+
+### cryptsy-public-api-get-sell-orders
+
+Takes a currency identifier and JSON response and returns a `vector` of sell
+orders. Each sell order consists of three fields:
+
+ - `total` - The total value of the order
+ - `quantity` - The number of currency items sold
+ - `price` - The price per unit
+
 
 ## Things That Use This Library
 
