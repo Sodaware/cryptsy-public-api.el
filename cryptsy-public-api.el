@@ -1,4 +1,4 @@
-;;; cryptsy-public-api.el --- API library for working with Crypsy
+;;; cryptsy-public-api.el --- API library for working with Cryptsy
 
 ;; Copyright (C) 2014 Phil Newton
 
