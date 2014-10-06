@@ -1,3 +1,7 @@
+;; Required testing libraries
+(require 'cl)
+(require 'el-mock)
+
 (add-to-list 'load-path (file-name-directory (directory-file-name (file-name-directory load-file-name))))
 (require 'cryptsy-public-api)
 
@@ -11,3 +15,9 @@
                           (insert-file-contents file-path)
                           (buffer-string))))
     (json-read-from-string file-contents)))
+
+;; Mock Helpers
+
+(defmacro mock-request (query-vars fixture)
+  (let ((uri (cryptsy-public-api--create-endpoint query-vars)))
+    `(mock (cryptsy-public-api--get-uri ,uri) => (read-fixture ,fixture))))
