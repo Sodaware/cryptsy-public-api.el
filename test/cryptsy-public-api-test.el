@@ -1,13 +1,13 @@
 (ert-deftest cryptsy-public-api-test/can-create-endpoint ()
   (should (string=
            "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=182"
-           (cryptsy-public-api-create-endpoint (list :method "singlemarketdata"
+           (cryptsy-public-api--create-endpoint (list :method "singlemarketdata"
                                                      :marketid 182)))))
 
 (ert-deftest cryptsy-public-api-test/can-build-query ()
   (should (string=
            "method=singlemarketdata&marketid=182"
-           (cryptsy-public-api-build-query (list :method "singlemarketdata"
+           (cryptsy-public-api--build-query (list :method "singlemarketdata"
                                                  :marketid 182)))))
 
 (ert-deftest cryptsy-public-api-test/can-get-named-value ()
@@ -15,10 +15,16 @@
     (should (string= "DOGE"
                      (cryptsy-public-api-get-info-value 'DOGE 'primarycode contents)))))
 
-
 (ert-deftest cryptsy-public-api-test/can-get-buy-orders ()
-  (let ((contents (read-fixture "singlemarketdata-marketid-182.json")))
-    (should (= 5 (length (cryptsy-public-api-get-buy-orders 'DOGE contents))))))
+  (with-mock
+   (mock-request (:method "singlemarketdata" :marketid 182) "singlemarketdata-marketid-182.json")
+
+   (let ((response (cryptsy-public-api-get-market-data 182)))
+     (should (= 5 (length (cryptsy-public-api-get-buy-orders 'DOGE response)))))
+   
+   )
+  
+  )
 
 (ert-deftest cryptsy-public-api-test/can-get-buy-order-values ()
   (let ((contents (read-fixture "singlemarketdata-marketid-182.json")))

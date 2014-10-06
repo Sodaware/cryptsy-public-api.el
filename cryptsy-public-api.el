@@ -60,19 +60,16 @@
 
 Using nil or :all for MARKET-ID will return general data."
   (if (or (null market-id) (eq :all market-id))
-      (cryptsy-public-api-get :method "marketdatav2")
-    (cryptsy-public-api-get :method "singlemarketdata" :marketid market-id)))
+      (cryptsy-public-api--get :method "marketdatav2")
+    (cryptsy-public-api--get :method "singlemarketdata" :marketid market-id)))
 
 (defun cryptsy-public-api-get-orderbook-data (&optional market-id)
   "Fetches order book data for MARKET-ID.
 
 Using nil or :all for MARKET-ID will return general data."
   (if (or (null market-id) (eq :all market-id))
-      (cryptsy-public-api-get :method "orderdatav1")
-    (cryptsy-public-api-get :method "singleorderdata" :marketid market-id)))
-
-
-;; API helpers
+      (cryptsy-public-api--get :method "orderdatav1")
+    (cryptsy-public-api--get :method "singleorderdata" :marketid market-id)))
 
 (defun cryptsy-public-api-get-info-value (name field response)
   "Get the value of NAME's FIELD from a RESPONSE."
@@ -90,23 +87,26 @@ Using nil or :all for MARKET-ID will return general data."
   "Get the sell orders for NAME from a RESPONSE."
   (assoc-default 'sellorders (cryptsy-public-api-get-info name response)))
 
-(defun cryptsy-public-api-get (&rest query-vars)
-  "Generate a uri using QUERY-VARS and retrieve the result from the API."
-  (cryptsy-public-api-get-uri (cryptsy-public-api-create-endpoint query-vars)))
 
-(defun cryptsy-public-api-get-uri (uri)
-  "Fetch the contents URI and return as JSON."
+;; Internal helpers
+
+(defun cryptsy-public-api--get (&rest query-vars)
+  "Generate a uri using QUERY-VARS and retrieve the result from the API."
+  (cryptsy-public-api--get-uri (cryptsy-public-api--create-endpoint query-vars)))
+
+(defun cryptsy-public-api--get-uri (uri)
+  "Fetch the contents of URI and return as JSON."
   (with-current-buffer (url-retrieve-synchronously uri)
     (goto-char (point-min))
     (goto-char url-http-end-of-headers)
     (prog1 (json-read)
       (kill-buffer))))
 
-(defun cryptsy-public-api-create-endpoint (query-vars)
+(defun cryptsy-public-api--create-endpoint (query-vars)
   "Build an endpoint to the public api using QUERY-VARS."
-  (format "%s?%s" cryptsy-public-api-endpoint (cryptsy-public-api-build-query query-vars)))
+  (format "%s?%s" cryptsy-public-api-endpoint (cryptsy-public-api--build-query query-vars)))
 
-(defun cryptsy-public-api-build-query (query-vars)
+(defun cryptsy-public-api--build-query (query-vars)
   "Build a query string using QUERY-VARS.
 
 QUERY_VARS should be a list of symbols and their corresponding
