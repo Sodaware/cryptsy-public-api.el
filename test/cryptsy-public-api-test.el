@@ -46,3 +46,10 @@
    (should (fboundp 'cryptsy-public-api-doge-get-volume))
    (should (= 527237.54751297 (cryptsy-public-api-doge-get-volume)))))
 
+(ert-deftest cryptsy-public-api/test-can-create-last-trade-price-accessor ()
+  (with-mock
+   (mock-request (:method "singlemarketdata" :marketid 182) "singlemarketdata-marketid-182.json")
+   (cryptsy-public-api-def-info-accessors "DOGE" 182)
+   (should (fboundp 'cryptsy-public-api-doge-get-last-trade-price))
+   (should (= 0.00038276 (cryptsy-public-api-doge-get-last-trade-price)))))
+

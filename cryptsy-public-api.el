@@ -101,12 +101,16 @@ Using nil or :all for MARKET-ID will return data for all markets."
 (defmacro cryptsy-public-api-def-info-accessors (market-name market-id)
   "Defines helper macros for MARKET-NAME, accessed via MARKET-ID."
   (let* ((market-symbol (intern market-name))
-         (method-prefix (downcase market-name))
-         (volume-method (format "cryptsy-public-api-%s-get-volume" method-prefix)))
+         (function-prefix (downcase market-name))
+         (volume-function (format "cryptsy-public-api-%s-get-volume" function-prefix))
+         (last-trade-price-function (format "cryptsy-public-api-%s-get-last-trade-price" function-prefix)))
     `(progn
-       (defun ,(intern volume-method) ()
+       (defun ,(intern volume-function) ()
          (let ((response (cryptsy-public-api-get-market-data ,market-id)))
-           (string-to-number (assoc-default 'volume (cryptsy-public-api-get-info ',market-symbol response))))))))
+           (string-to-number (assoc-default 'volume (cryptsy-public-api-get-info ',market-symbol response)))))
+       (defun ,(intern last-trade-price-function) ()
+         (let ((response (cryptsy-public-api-get-market-data ,market-id)))
+           (string-to-number (assoc-default 'lasttradeprice (cryptsy-public-api-get-info ',market-symbol response))))))))
 
 
 ;; Internal helpers
