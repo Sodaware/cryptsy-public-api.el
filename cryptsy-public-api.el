@@ -32,6 +32,14 @@
 
 ;; Leaving off the `market-id' parameter or using `:all' will fetch general
 ;; information rather than data for a single market.
+
+;; This library also supplies macros for creating helper methods to access
+;; markets directly rather than messing around with JSON responses.  The
+;; following macros are available:
+
+;;   - cryptsy-public-api-def-info-accessors
+;;     This creates functions needed to access a currency's basic info
+
  
 ;; For more information on the API, see https://www.cryptsy.com/pages/publicapi
 
@@ -86,6 +94,19 @@ Using nil or :all for MARKET-ID will return data for all markets."
 (defun cryptsy-public-api-get-sell-orders (name response)
   "Get the sell orders for NAME from a RESPONSE."
   (assoc-default 'sellorders (cryptsy-public-api-get-info name response)))
+
+
+;; Currency Helper Macros
+
+(defmacro cryptsy-public-api-def-info-accessors (market-name market-id)
+  "Defines helper macros for MARKET-NAME, accessed via MARKET-ID."
+  (let* ((market-symbol (intern market-name))
+         (method-prefix (downcase market-name))
+         (volume-method (format "cryptsy-public-api-%s-get-volume" method-prefix)))
+    `(progn
+       (defun ,(intern volume-method) ()
+         (let ((response (cryptsy-public-api-get-market-data ,market-id)))
+           (string-to-number (assoc-default 'volume (cryptsy-public-api-get-info ',market-symbol response))))))))
 
 
 ;; Internal helpers

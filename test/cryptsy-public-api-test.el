@@ -20,11 +20,7 @@
    (mock-request (:method "singlemarketdata" :marketid 182) "singlemarketdata-marketid-182.json")
 
    (let ((response (cryptsy-public-api-get-market-data 182)))
-     (should (= 5 (length (cryptsy-public-api-get-buy-orders 'DOGE response)))))
-   
-   )
-  
-  )
+     (should (= 5 (length (cryptsy-public-api-get-buy-orders 'DOGE response)))))))
 
 (ert-deftest cryptsy-public-api-test/can-get-buy-order-values ()
   (let ((contents (read-fixture "singlemarketdata-marketid-182.json")))
@@ -35,8 +31,18 @@
   (let ((contents (read-fixture "singlemarketdata-marketid-182.json")))
     (should (= 4 (length (cryptsy-public-api-get-sell-orders 'DOGE contents))))))
 
-
 (ert-deftest cryptsy-public-api-test/can-get-sell-order-values ()
   (let ((contents (read-fixture "singlemarketdata-marketid-182.json")))
     (should (string= "0.00038221"
                      (assoc-default 'total (elt (cryptsy-public-api-get-sell-orders 'DOGE contents) 0))))))
+
+
+;; Macro Tests
+
+(ert-deftest cryptsy-public-api/test-can-create-volume-accessor ()
+  (with-mock
+   (mock-request (:method "singlemarketdata" :marketid 182) "singlemarketdata-marketid-182.json")
+   (cryptsy-public-api-def-info-accessors "DOGE" 182)
+   (should (fboundp 'cryptsy-public-api-doge-get-volume))
+   (should (= 527237.54751297 (cryptsy-public-api-doge-get-volume)))))
+
