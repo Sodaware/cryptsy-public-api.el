@@ -1,9 +1,9 @@
-;;; cryptsy-public-api.el --- API library for working with Cryptsy
+;;; cryptsy-public-api.el --- Library for working with the Cryptsy public API
 
 ;; Copyright (C) 2014 Phil Newton
 
 ;; Author: Phil Newton <phil@sodaware.net>
-;; Version: 1.0.0
+;; Version: 0.1.0
 ;; Package-Requires: ((json "1.2"))
 ;; Keywords: cryptsy bitcoin litecoin dogecoin
 
@@ -58,7 +58,7 @@
 (defun cryptsy-public-api-get-market-data (&optional market-id)
   "Fetches market data for MARKET-ID.
 
-Using nil or :all for MARKET-ID will return general data."
+Using nil or :all for MARKET-ID will return data for all markets."
   (if (or (null market-id) (eq :all market-id))
       (cryptsy-public-api--get :method "marketdatav2")
     (cryptsy-public-api--get :method "singlemarketdata" :marketid market-id)))
@@ -66,7 +66,7 @@ Using nil or :all for MARKET-ID will return general data."
 (defun cryptsy-public-api-get-orderbook-data (&optional market-id)
   "Fetches order book data for MARKET-ID.
 
-Using nil or :all for MARKET-ID will return general data."
+Using nil or :all for MARKET-ID will return data for all markets."
   (if (or (null market-id) (eq :all market-id))
       (cryptsy-public-api--get :method "orderdatav1")
     (cryptsy-public-api--get :method "singleorderdata" :marketid market-id)))
