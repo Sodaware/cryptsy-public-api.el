@@ -39,6 +39,7 @@
 
 ;;   - cryptsy-public-api-def-info-accessors
 ;;     This creates functions needed to access a currency's basic info
+;;     including the last trade price, time and volume.
 
  
 ;; For more information on the API, see https://www.cryptsy.com/pages/publicapi
@@ -103,8 +104,12 @@ Using nil or :all for MARKET-ID will return data for all markets."
   (let* ((market-symbol (intern market-name))
          (function-prefix (downcase market-name))
          (volume-function (format "cryptsy-public-api-%s-get-volume" function-prefix))
-         (last-trade-price-function (format "cryptsy-public-api-%s-get-last-trade-price" function-prefix)))
+         (last-trade-price-function (format "cryptsy-public-api-%s-get-last-trade-price" function-prefix))
+         (last-trade-time-function (format "cryptsy-public-api-%s-get-last-trade-time" function-prefix)))
     `(progn
+       (defun ,(intern last-trade-time-function) ()
+         (let ((response (cryptsy-public-api-get-market-data ,market-id)))
+           (assoc-default 'lasttradetime (cryptsy-public-api-get-info ',market-symbol response))))
        (defun ,(intern volume-function) ()
          (let ((response (cryptsy-public-api-get-market-data ,market-id)))
            (string-to-number (assoc-default 'volume (cryptsy-public-api-get-info ',market-symbol response)))))

@@ -53,3 +53,9 @@
    (should (fboundp 'cryptsy-public-api-doge-get-last-trade-price))
    (should (= 0.00038276 (cryptsy-public-api-doge-get-last-trade-price)))))
 
+(ert-deftest cryptsy-public-api/test-can-create-last-trade-time-accessor ()
+  (with-mock
+   (mock-request (:method "singlemarketdata" :marketid 182) "singlemarketdata-marketid-182.json")
+   (cryptsy-public-api-def-info-accessors "DOGE" 182)
+   (should (fboundp 'cryptsy-public-api-doge-get-last-trade-time))
+   (should (string= "2014-09-30 10:13:21" (cryptsy-public-api-doge-get-last-trade-time)))))
