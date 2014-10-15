@@ -120,7 +120,7 @@ orders. Each sell order consists of three fields:
 
 ## Things That Use This Library
 
-- dogecoin-ticker-mode
+* [crypto-ticker-mode](https://github.com/Sodaware/crypto-ticker-mode/)
 
 
 ## Licence
