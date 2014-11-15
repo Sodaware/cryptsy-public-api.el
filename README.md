@@ -12,16 +12,40 @@ something more interesting.
 
 ## Installation
 
+As there are no interactive functions in this library, it is not recommended
+that you install this package directly.
+
+### Via Melpa
+
+If you aren't already using [Melpa](http://melpa.milkbox.net/), add the
+following to your Emacs initialization file:
+
+```el
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.org/packages/")))
+
+(package-initialize)
+```
+
+Once Emacs is configured to use Melpa as a source, you can install the package
+using the following:
+
+```
+M-x package-install crypsty-public-api
+```
+
+### Via GitHub
+
+**Note** - This method is not recommended.
+
 All Emacs installs are a little different, but the basic outline is this:
 
-- Download the source code and put it somewhere Emacs can find it (probably
-    `~/.emacs.d/`)
-    
+- Clone the repository to somewhere Emacs can find it (probably `~/.emacs.d/`)
 - Add that directory to your load-path if it’s not yet there:
-```lisp
+```el
 (add-to-list 'load-path "/path/to/dir")
 ```
- 
 - Add `(require 'cryptsy-public-api)` somewhere in Emacs initialization file.
 
 
