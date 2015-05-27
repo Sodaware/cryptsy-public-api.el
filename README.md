@@ -55,7 +55,7 @@ The two main functions in the API are:
 
 ### cryptsy-public-api-get-market-data
 
-**cryptsy-public-api-get-market-data** is used to fetch gneral market data. It
+**cryptsy-public-api-get-market-data** is used to fetch general market data. It
 can be called either with a `market-id`, or with `:all` to fetch all market
 data.
 
@@ -64,7 +64,7 @@ recent buy orders, sell orders and recent trades.
 
 The following example fetches the current value of BTC in USD:
 
-```lisp
+```el
 (defun get-info-node (response type)
   (assoc-default type (assoc-default 'markets (assoc-default 'return response))))
 
@@ -104,7 +104,7 @@ information from the JSON responses.
 Takes a currency identifier, field name and JSON response and returns the
 value. The earlier example for fetching a currency's value can be rewritten as:
 
-```lisp
+```el
 (let ((response (cryptsy-public-api-get-market-data 2)))
   (cryptsy-public-api-get-info-value 'BTC 'lasttradeprice contents))
 ```
