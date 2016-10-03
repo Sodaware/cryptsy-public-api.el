@@ -9,6 +9,9 @@ LiteCoin and Dogecoin.
 It's not a particularly useful extension on its own, but can be used to build
 something more interesting.
 
+**NOTE**: The Cryptsy exchange has closed, so this extensions can no longer 
+fetch useful data. However, it might be useful when learning about querying 
+APIs using Emacs lisp.
 
 ## Installation
 
